@@ -11,29 +11,44 @@ export const queryFollowers = async (
   id: string,
   logPath: string,
   pagination_token: string | undefined
-) => {
+): Promise<any> => {
   try {
     const followerResponse = await client.users.usersIdFollowers(id, {
       max_results: 1000,
       pagination_token: pagination_token,
     });
-    if (!followerResponse.errors && followerResponse.data) {
-      return followerResponse.data;
+    console.log(followerResponse);
+    if (
+      followerResponse.meta &&
+      followerResponse.meta?.result_count &&
+      followerResponse.meta?.result_count > 0
+    ) {
+      if (!followerResponse.errors && followerResponse.data) {
+        return {
+          followers: followerResponse.data,
+          nextToken: followerResponse.meta?.next_token,
+        };
+      } else {
+        // prepare gracefull shutdown
+        // save last processed id and page token
+        const currentPosition: Position = {
+          id: id,
+          pagination_token: pagination_token,
+        };
+        fs.writeFileSync(logPath, JSON.stringify(currentPosition));
+        if (followerResponse.errors) {
+          followerResponse.errors.forEach((err) => {
+            console.error(err);
+          });
+        }
+        console.error(
+          "To many requests going to sleep and retry for 17 minutes"
+        );
+        await sleepFor17Min();
+        return await queryFollowers(client, id, logPath, pagination_token);
+      }
     } else {
-      // prepare gracefull shutdown
-      // save last processed id and page token
-      const currentPosition: Position = {
-        id: id,
-        pagination_token: pagination_token,
-      };
-      fs.writeFileSync(logPath, JSON.stringify(currentPosition));
-      followerResponse.errors!.forEach((err) => {
-        console.error(err);
-      });
-      console.error(
-        "Shutdown because of errors, saved current position into logfile"
-      );
-      throw followerResponse.errors;
+      return { followers: undefined, nextToken: undefined };
     }
   } catch (error) {
     // prepare gracefull shutdown
@@ -48,6 +63,16 @@ export const queryFollowers = async (
       "Shutdown because of errors, saved current position into logfile"
     );
     console.error(error);
-    throw error;
+    console.error("To many requests going to sleep and retry for 17 minutes");
+    await sleepFor17Min();
+    return queryFollowers(client, id, logPath, pagination_token);
   }
+};
+
+const sleepFor17Min = async () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("");
+    }, 930000);
+  });
 };

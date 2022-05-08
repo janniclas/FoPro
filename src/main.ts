@@ -10,7 +10,8 @@ export const main = async () => {
   const bearerToken = process.env.BEARER_TOKEN;
 
   if (bearerToken) {
-    const filePath = "/usr/app/data/deuxcvsix.csv";
+    const filePath = process.argv.slice(2)[0];
+
     const rawRecords = await getRawRecords(filePath);
     const originalAuthorId = rawRecords[0];
     console.log(`read ids from file. Parent id ${originalAuthorId}`);

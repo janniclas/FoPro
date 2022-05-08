@@ -33,7 +33,7 @@ export const queryFollowers = async (
           id,
           pagination_token,
           logPath,
-          "To many requests going to sleep and retry for 17 minutes"
+          followerResponse.errors
         );
 
         return await queryFollowers(client, id, logPath, pagination_token);
@@ -60,12 +60,13 @@ const savePositionAndWait = async (
     pagination_token: pagination_token,
   };
   fs.writeFileSync(logPath, JSON.stringify(currentPosition));
-
-  console.error(
-    "Shutdown because of errors, saved current position into logfile"
-  );
   console.error(error);
-  console.error("To many requests going to sleep and retry for 17 minutes");
+  const date = new Date();
+  const time = date.getHours() + ":" + date.getMinutes();
+  console.error(
+    `${time} To many requests going to sleep and retry for 17 minutes`
+  );
+
   await sleepFor17Min();
 };
 

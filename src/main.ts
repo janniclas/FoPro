@@ -10,15 +10,15 @@ export const main = async () => {
   const bearerToken = process.env.BEARER_TOKEN;
 
   if (bearerToken) {
-    const filePath = "/Users/struewer/git/FoPro/data/deuxcvsix.csv";
+    const filePath = "/usr/app/data/deuxcvsix.csv";
     const rawRecords = await getRawRecords(filePath);
     const originalAuthorId = rawRecords[0];
     console.log(`read ids from file. Parent id ${originalAuthorId}`);
     const outputPath =
-      "/Users/struewer/git/FoPro/data/followers/" + originalAuthorId + ".csv";
+      "/usr/app/data/followers/" + originalAuthorId + ".csv";
     const appendMode = fs.existsSync(outputPath);
     const logPath =
-      "/Users/struewer/git/FoPro/data/followers/" + originalAuthorId + ".log";
+      "/usr/app/data/followers/" + originalAuthorId + ".log";
     let pagination_token: string | undefined = undefined;
     const csvFile = new CsvFile({
       path: outputPath,

@@ -20,8 +20,8 @@ export const queryFollowers = async (
     console.log(followerResponse);
     if (
       followerResponse.meta &&
-      followerResponse.meta?.result_count &&
-      followerResponse.meta?.result_count > 0
+      followerResponse.meta.result_count &&
+      followerResponse.meta.result_count > 0
     ) {
       if (!followerResponse.errors && followerResponse.data) {
         return {
@@ -29,44 +29,44 @@ export const queryFollowers = async (
           nextToken: followerResponse.meta?.next_token,
         };
       } else {
-        // prepare gracefull shutdown
-        // save last processed id and page token
-        const currentPosition: Position = {
-          id: id,
-          pagination_token: pagination_token,
-        };
-        fs.writeFileSync(logPath, JSON.stringify(currentPosition));
-        if (followerResponse.errors) {
-          followerResponse.errors.forEach((err) => {
-            console.error(err);
-          });
-        }
-        console.error(
+        savePositionAndWait(
+          id,
+          pagination_token,
+          logPath,
           "To many requests going to sleep and retry for 17 minutes"
         );
-        await sleepFor17Min();
+
         return await queryFollowers(client, id, logPath, pagination_token);
       }
     } else {
       return { followers: undefined, nextToken: undefined };
     }
   } catch (error) {
-    // prepare gracefull shutdown
-    // save last processed id and page token
-    const currentPosition: Position = {
-      id: id,
-      pagination_token: pagination_token,
-    };
-    fs.writeFileSync(logPath, JSON.stringify(currentPosition));
-
-    console.error(
-      "Shutdown because of errors, saved current position into logfile"
-    );
-    console.error(error);
-    console.error("To many requests going to sleep and retry for 17 minutes");
-    await sleepFor17Min();
+    savePositionAndWait(id, pagination_token, logPath, error);
     return queryFollowers(client, id, logPath, pagination_token);
   }
+};
+
+const savePositionAndWait = async (
+  id: string,
+  pagination_token: string | undefined,
+  logPath: string,
+  error: any
+) => {
+  // prepare gracefull shutdown
+  // save last processed id and page token
+  const currentPosition: Position = {
+    id: id,
+    pagination_token: pagination_token,
+  };
+  fs.writeFileSync(logPath, JSON.stringify(currentPosition));
+
+  console.error(
+    "Shutdown because of errors, saved current position into logfile"
+  );
+  console.error(error);
+  console.error("To many requests going to sleep and retry for 17 minutes");
+  await sleepFor17Min();
 };
 
 const sleepFor17Min = async () => {

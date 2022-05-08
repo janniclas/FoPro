@@ -1,5 +1,7 @@
 import { FormatterOptionsArgs, Row, writeToStream } from "@fast-csv/format";
 import * as fs from "fs";
+import Client from "twitter-api-sdk";
+import { queryFollowers } from "./twitterQuery";
 
 type CsvFileOpts = {
   headers: string[];
@@ -61,3 +63,42 @@ export class CsvFile {
     });
   }
 }
+
+export const storeAllFollowers = async (
+  csvFile: CsvFile,
+  client: Client,
+  id: string,
+  logPath: string,
+  pagination_token: string | undefined
+) => {
+  let hasNext = true;
+  while (hasNext) {
+    const { followers, nextToken } = await queryFollowers(
+      client,
+      id,
+      logPath,
+      pagination_token
+    );
+    console.log(
+      `query result for user with id ${id} and token ${pagination_token}`
+    );
+    if (followers) {
+      const essentialData = followers.map((follower: any) => {
+        return {
+          id: follower.id,
+          username: follower.username,
+          name: follower.name,
+          parentId: id,
+        };
+      });
+      console.log(`start writing results to file for user ${id}`);
+      await csvFile.append(essentialData);
+      console.log(`finished writing results to file for user ${id}`);
+    }
+    if (nextToken) {
+      pagination_token = nextToken;
+    } else {
+      hasNext = false;
+    }
+  }
+};

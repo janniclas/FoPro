@@ -19,21 +19,20 @@ export const getPaths = (originalAuthorId: string) => {
 
 export const getStartParameters = (
   rawRecords: string[],
-  outputPath: string,
   logPath: string
 ) => {
-  const appendMode = fs.existsSync(outputPath);
+  const appendMode = fs.existsSync(logPath);
   let pagination_token: string | undefined = undefined;
-
-  console.log("A log file has been found and the start parameter are read.");
-  const logContent = fs.readFileSync(logPath, "utf8");
-  const currentPosition: Position = JSON.parse(logContent);
-  console.log(
-    `log content ${currentPosition.id} ${currentPosition.pagination_token}`
-  );
-  const startElement = rawRecords.indexOf(currentPosition.id);
-  rawRecords.splice(0, startElement);
-  pagination_token = currentPosition.pagination_token;
-
+  if (appendMode) {
+    console.log("A log file has been found and the start parameter are read.");
+    const logContent = fs.readFileSync(logPath, "utf8");
+    const currentPosition: Position = JSON.parse(logContent);
+    console.log(
+      `log content ${currentPosition.id} ${currentPosition.pagination_token}`
+    );
+    const startElement = rawRecords.indexOf(currentPosition.id);
+    rawRecords.splice(0, startElement);
+    pagination_token = currentPosition.pagination_token;
+  }
   return { appendMode, pagination_token, ids: rawRecords };
 };

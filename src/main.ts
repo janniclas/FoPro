@@ -17,7 +17,6 @@ export const main = async () => {
 
   const { appendMode, ids, pagination_token } = getStartParameters(
     rawRecords,
-    outputPath,
     logPath
   );
 
@@ -29,10 +28,11 @@ export const main = async () => {
   const client = new Client(bearerToken);
   for (const id of ids) {
     console.log(`start query for user with id ${id}`);
-    storeAllFollowers(csvFile, client, id, logPath, pagination_token);
+    await storeAllFollowers(csvFile, client, id, logPath, pagination_token);
   }
 
   console.log(`Finished processing file ${filePath}`);
 };
+
 
 main();

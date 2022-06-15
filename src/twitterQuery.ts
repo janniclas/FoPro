@@ -29,7 +29,7 @@ export const queryFollowers = async (
           nextToken: followerResponse.meta?.next_token,
         };
       } else {
-        savePositionAndWait(
+        await savePositionAndWait(
           id,
           pagination_token,
           logPath,
@@ -42,7 +42,7 @@ export const queryFollowers = async (
       return { followers: undefined, nextToken: undefined };
     }
   } catch (error) {
-    savePositionAndWait(id, pagination_token, logPath, error);
+    await savePositionAndWait(id, pagination_token, logPath, error);
     return queryFollowers(client, id, logPath, pagination_token);
   }
 };

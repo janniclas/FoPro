@@ -1,7 +1,13 @@
 
-npm run start verify path/to/file
-npm run start query path/to/file
+## How To
+Use `npm install && npm run compile` to install dependencies and compile the program. 
+The program supports three different modes `query`, `verify`, and `statistic`.
+Run the program with `npm run start mode path/to/file`.
 
-file expects a csv file with one id per row and nothing else in it.
+For `query` the given file should be a csv file containing only one column per row containing a valid twitter user id. For this user id all followers are querried and stored.
 
-docker build -t fopro . && docker run -d -v /local/file/path/data:/usr/app/data fopro verify /usr/app/data/fileName.csv
+The other modes expect a file input in the format generated from the `query` mode. This is a csv file with the headers `id, name, username, parent`.
+
+
+## Example Docker command
+`docker build -t fopro . && docker run -d -v /local/file/path/data:/usr/app/data fopro verify /usr/app/data/fileName.csv`

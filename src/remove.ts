@@ -26,6 +26,5 @@ export const removeDuplicateRows = async (filePath: string) => {
       } else {
         duplicateRowCounter += 1;
       }
-    })
-    .on("end", async (_: number) => {});
+    });
 };

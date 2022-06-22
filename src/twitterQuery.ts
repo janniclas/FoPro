@@ -6,6 +6,17 @@ export interface Position {
   pagination_token: string | undefined;
 }
 
+export const getExpectedFollowerCount = async (
+  client: Client,
+  id: string | undefined
+) => {
+  if (id)
+    return (
+      await client.users.findUserById(id, { "user.fields": ["public_metrics"] })
+    ).data?.public_metrics?.followers_count;
+  else return -1;
+};
+
 export const queryFollowers = async (
   client: Client,
   id: string,

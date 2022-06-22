@@ -1,26 +1,29 @@
 import { Position } from "./twitterQuery";
 import * as fs from "fs";
+import path = require("node:path");
 
 export const readConfig = () => {
   const bearerToken = process.env.BEARER_TOKEN;
-  if (bearerToken) {
-    return { bearerToken: bearerToken, filePath: process.argv.slice(2)[0] };
+  const customArgs = process.argv.slice(2);
+  const pathString = customArgs[1];
+  const mode = customArgs[0];
+
+  if (bearerToken && pathString && mode) {
+    return { bearerToken: bearerToken, filePath: pathString, mode: mode };
   } else {
-    throw Error("No Bearer Token Provided.");
+    throw Error("Not all input params were provided correctly.");
   }
 };
 
-export const getPaths = (originalAuthorId: string) => {
+export const getPaths = (filePath: string, originalAuthorId: string) => {
+  const p = path.parse(filePath);
   return {
-    outputPath: "/usr/app/data/followers/" + originalAuthorId + ".csv",
-    logPath: "/usr/app/data/followers/" + originalAuthorId + ".log",
+    outputPath: p.dir + "/" + originalAuthorId + ".csv",
+    logPath: p.dir + "/" + originalAuthorId + ".log",
   };
 };
 
-export const getStartParameters = (
-  rawRecords: string[],
-  logPath: string
-) => {
+export const getStartParameters = (rawRecords: string[], logPath: string) => {
   const appendMode = fs.existsSync(logPath);
   let pagination_token: string | undefined = undefined;
   if (appendMode) {

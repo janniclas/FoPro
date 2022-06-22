@@ -3,6 +3,7 @@ import { getPaths, readConfig } from "./configReader";
 
 import { readUserIDs } from "./fileReader";
 import { queryFollower } from "./query";
+import { removeDuplicateRows } from "./remove";
 import { calculateStatistics, saveUniqueFollower } from "./statistic";
 import { verifyFollower } from "./verify";
 
@@ -34,6 +35,9 @@ const main = async () => {
       calculateStatistics(filePath).then((statistic) =>
         saveUniqueFollower(filePath, statistic)
       );
+      break;
+    case "remove-duplicates":
+      removeDuplicateRows(outputPath);
       break;
     default:
       console.log("Unkown mode. Possible modes: query, verify, statistic.");

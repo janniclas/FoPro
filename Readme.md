@@ -1,5 +1,14 @@
 
 ## How To
+The program expects an `.env` file with the twitter api credentials in the following format:
+```
+BEARER_TOKEN=TOKEN
+API_KEY=KEY
+API_SECRET_KEY=SECRET
+ACCESS_TOKEN=my-access-token
+ACCESS_TOKEN_SECRET=my-access-token-secret
+```
+
 Use `npm install && npm run compile` to install dependencies and compile the program. 
 The program supports three different modes `query`, `verify`, and `statistic`.
 Run the program with `npm run start mode path/to/file`.

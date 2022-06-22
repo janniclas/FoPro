@@ -38,8 +38,12 @@ export const calculateStatistics = (path: string) => {
           const user = rowToUser(row);
           followerMap.set(id, user);
         } else {
-          followerMap.get(id)?.parents.push(row[3]);
-          duplicateCounter += 1;
+          const parents = followerMap.get(id)?.parents;
+          const parent = row[3];
+          if (!parents?.includes(parent)) {
+            parents?.push(parent);
+            duplicateCounter += 1;
+          }
         }
       })
       .on("end", (rowCount: number) => {

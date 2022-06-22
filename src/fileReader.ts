@@ -20,8 +20,7 @@ export const readUserIDs = async (filePath: string) => {
         .on("data", (row: any) => {
           rawRecords.push(row[0]);
         })
-        .on("end", (rowCount: number) => {
-          console.log(`Parsed ${rowCount} rows`);
+        .on("end", (_: number) => {
           resolve({ rawRecords: rawRecords, originalAuthorId: rawRecords[0] });
         });
     }

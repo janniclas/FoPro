@@ -12,8 +12,6 @@ const main = async () => {
 
   const { rawRecords, originalAuthorId } = await readUserIDs(filePath);
   const noDuplicates = [...new Set(rawRecords)];
-  console.log(rawRecords.length);
-  console.log(noDuplicates.length);
   const { outputPath, logPath } = getPaths(filePath, originalAuthorId);
 
   switch (mode) {

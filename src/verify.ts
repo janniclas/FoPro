@@ -10,19 +10,30 @@ export const verifyFollower = async (
   bearerToken: string
 ) => {
   const parentToCounter = new Map<string, number>();
+  const rowSet = new Set<string>();
+  let duplicateRowCounter = 0;
   fs.createReadStream(filePath)
     .pipe(csv.parse())
     .on("error", (error) => console.error(error))
-    .on("data", (row) => {
-      const parentId = row[3];
-      if (!parentToCounter.has(parentId)) {
-        parentToCounter.set(parentId, 1);
+    .on("data", (row: string[]) => {
+      const rowString = row.reduce((previousValue, currentValue) => {
+        return previousValue + currentValue;
+      }, "");
+      if (!rowSet.has(rowString)) {
+        rowSet.add(rowString);
+        const parentId = row[3];
+        if (!parentToCounter.has(parentId)) {
+          parentToCounter.set(parentId, 1);
+        } else {
+          const current = parentToCounter.get(parentId)!;
+          parentToCounter.set(parentId, current + 1);
+        }
       } else {
-        const current = parentToCounter.get(parentId)!;
-        parentToCounter.set(parentId, current + 1);
+        duplicateRowCounter += 1;
       }
     })
     .on("end", async (_: number) => {
+      console.log("duplicate rows " + duplicateRowCounter);
       const client = new Client(bearerToken);
       for (const key of parentToCounter.keys()) {
         const followerCount = await getExpectedFollowerCount(client, key);
@@ -31,10 +42,7 @@ export const verifyFollower = async (
           console.log("perfect match !");
         } else {
           console.log(
-            "expected count " +
-              followerCount +
-              " stored count: " +
-              querriedCount
+            `expected count for id ${key} ${followerCount} stored count: ${querriedCount}`
           );
           if (followerCount && querriedCount) {
             const diff = followerCount - querriedCount;

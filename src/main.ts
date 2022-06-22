@@ -10,13 +10,16 @@ const main = async () => {
   const { bearerToken, filePath, mode } = readConfig();
 
   const { rawRecords, originalAuthorId } = await readUserIDs(filePath);
+  const noDuplicates = [...new Set(rawRecords)];
+  console.log(rawRecords.length);
+  console.log(noDuplicates.length);
   const { outputPath, logPath } = getPaths(filePath, originalAuthorId);
 
   switch (mode) {
     case "query":
       console.log("Running in query mode");
       queryFollower(
-        rawRecords,
+        noDuplicates,
         originalAuthorId,
         bearerToken,
         outputPath,
@@ -25,7 +28,7 @@ const main = async () => {
       break;
     case "verify":
       console.log("Running in verify mode");
-      verifyFollower(outputPath, rawRecords.length, bearerToken);
+      verifyFollower(outputPath, noDuplicates.length, bearerToken);
       break;
     case "statistic":
       calculateStatistics(filePath).then((statistic) =>

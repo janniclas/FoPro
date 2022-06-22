@@ -3,6 +3,7 @@ import { getPaths, readConfig } from "./configReader";
 
 import { readUserIDs } from "./fileReader";
 import { queryFollower } from "./query";
+import { calculateStatistics, saveUniqueFollower } from "./statistic";
 import { verifyFollower } from "./verify";
 
 const main = async () => {
@@ -27,6 +28,9 @@ const main = async () => {
       verifyFollower(outputPath, rawRecords.length, bearerToken);
       break;
     case "statistic":
+      calculateStatistics(filePath).then((statistic) =>
+        saveUniqueFollower(filePath, statistic)
+      );
       break;
     default:
       console.log("Unkown mode. Possible modes: query, verify, statistic.");

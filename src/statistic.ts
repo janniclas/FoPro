@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as csv from "fast-csv";
 import { CsvFile } from "./fileWriter";
 
-interface User {
+export interface User {
   id: string;
   userName: string;
   name: string;
@@ -13,7 +13,7 @@ interface Statistic {
   set: Map<string, User>;
 }
 
-const rowToUser = (row: any): User => {
+export const rowToUser = (row: any): User => {
   const parents = [];
   parents.push(row[3]);
   return {

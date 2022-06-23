@@ -2,6 +2,11 @@ import "dotenv/config";
 import { getPaths, readConfig } from "./configReader";
 
 import { readUserIDs } from "./fileReader";
+import {
+  getNodeAndEdgePaths,
+  prepareTransitivity,
+  saveTransitivity,
+} from "./networkTransitivity";
 import { queryFollower } from "./query";
 import { removeDuplicateRows } from "./remove";
 import { calculateStatistics, saveUniqueFollower } from "./statistic";
@@ -36,6 +41,12 @@ const main = async () => {
       break;
     case "remove-duplicates":
       removeDuplicateRows(outputPath);
+      break;
+    case "network-transitivity":
+      prepareTransitivity(filePath).then((data) => {
+        const { nodePath, edgePath } = getNodeAndEdgePaths(filePath);
+        saveTransitivity(nodePath, edgePath, data);
+      });
       break;
     default:
       console.log("Unkown mode. Possible modes: query, verify, statistic.");

@@ -20,3 +20,6 @@ The other modes expect a file input in the format generated from the `query` mod
 
 ## Example Docker command
 `docker build -t fopro . && docker run -d -v /local/file/path/data:/usr/app/data fopro verify /usr/app/data/fileName.csv`
+
+## Post Processing Scripts
+The post processing scripts folder contains additional scripts to calculate statistical information based on the previously querried datasets. 

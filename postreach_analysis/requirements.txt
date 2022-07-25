@@ -1,3 +1,4 @@
 pandas
-re
 numpy
+varname
+openpyxl

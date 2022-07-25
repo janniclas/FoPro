@@ -17,25 +17,26 @@ def createDiffusionDf(df, createdTime, plotDf, maxFollower, name):
                 plotDf.loc[index, "Timestamp"] = time
         else:
             break
-    
-createDiffusionDf(docknack, docknackcreated, plotdocknack, docknackmaxfollower, "docknack")
-createDiffusionDf(deuxcvsix, deuxcvsixcreated, plotdeuxcvsix, deuxcvsixmaxfollower, "deuxcvsix")
-createDiffusionDf(florianaigner, florianaignercreated, plotflorianaigner, florianaignermaxfollower, "florianaigner")
-createDiffusionDf(lassehallstroem, lassehallstroemcreated, plotlassehallstroem, lassehallstroemmaxfollower, "LasseHallstroem")
-createDiffusionDf(rosenbusch, rosenbuschcreated, plotrosenbusch, rosenbuschmaxfollower, "rosenbusch_")
-createDiffusionDf(themios, themisocreated, plotthemios, themiosmaxfollower, "Themios")
 
-fig,ax = plt.subplots()
-ax.plot("Timestamp", "docknack", data=plotdocknack, color="red", label="False Information")
-ax.plot("Timestamp", "deuxcvsix", data=plotdeuxcvsix, color="black", label = "Debunker")
-ax.plot("Timestamp", "florianaigner", data=plotflorianaigner, color="black", label = "_nolegend_")
-ax.plot("Timestamp", "LasseHallstroem", data=plotlassehallstroem, color="red", label = "_nolegend_")
-ax.plot("Timestamp", "rosenbusch_", data=plotrosenbusch, color="red", label = "_nolegend_")
-ax.plot("Timestamp", "Themios", data=plotthemios, color="black", label = "_nolegend_")
-hh_mm = DateFormatter('%H')
-ax.xaxis.set_major_formatter(hh_mm)
-plt.legend(loc="upper left")
-ax.set_ylabel("Reach in Percentage", fontsize=20)
-ax.set_xlabel("Hours after the Tweet", fontsize=20)
-plt.show()
-    
+def all_diffusions(): 
+    createDiffusionDf(docknack, docknackcreated, plotdocknack, docknackmaxfollower, "docknack")
+    createDiffusionDf(deuxcvsix, deuxcvsixcreated, plotdeuxcvsix, deuxcvsixmaxfollower, "deuxcvsix")
+    createDiffusionDf(florianaigner, florianaignercreated, plotflorianaigner, florianaignermaxfollower, "florianaigner")
+    createDiffusionDf(lassehallstroem, lassehallstroemcreated, plotlassehallstroem, lassehallstroemmaxfollower, "LasseHallstroem")
+    createDiffusionDf(rosenbusch, rosenbuschcreated, plotrosenbusch, rosenbuschmaxfollower, "rosenbusch_")
+    createDiffusionDf(themios, themisocreated, plotthemios, themiosmaxfollower, "Themios")
+
+    fig,ax = plt.subplots()
+    ax.plot("Timestamp", "docknack", data=plotdocknack, color="red", label="False Information")
+    ax.plot("Timestamp", "deuxcvsix", data=plotdeuxcvsix, color="black", label = "Debunker")
+    ax.plot("Timestamp", "florianaigner", data=plotflorianaigner, color="black", label = "_nolegend_")
+    ax.plot("Timestamp", "LasseHallstroem", data=plotlassehallstroem, color="red", label = "_nolegend_")
+    ax.plot("Timestamp", "rosenbusch_", data=plotrosenbusch, color="red", label = "_nolegend_")
+    ax.plot("Timestamp", "Themios", data=plotthemios, color="black", label = "_nolegend_")
+    hh_mm = DateFormatter('%H')
+    ax.xaxis.set_major_formatter(hh_mm)
+    plt.legend(loc="upper left")
+    ax.set_ylabel("Reach in Percentage", fontsize=20)
+    ax.set_xlabel("Hours after the Tweet", fontsize=20)
+    plt.savefig('diffusion')
+        

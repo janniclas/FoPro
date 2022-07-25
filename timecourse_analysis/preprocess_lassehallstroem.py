@@ -1,6 +1,6 @@
 import preprocessor
 import os
-from initialize import ivermectin, lassehallstroemtweets, lassehallstroemfollower
+from initialize_preprocess import ivermectin, lassehallstroemtweets, lassehallstroemfollower
 
 lassehallstroem = lassehallstroemtweets.iloc[4]
 lassehallstroemfollower.set_axis(["User", "Username", "Displayname", "IrId"], axis=1, inplace=True)

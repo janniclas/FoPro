@@ -1,4 +1,5 @@
 import pandas as pd
+from initialize_preprocess import ivermectin
 
 def preprocess(tweet, interactions, follower):
     interactions["CreatedAt"] = pd.to_datetime(interactions["CreatedAt"])
@@ -30,3 +31,11 @@ def preprocess(tweet, interactions, follower):
         impressions = impressions.append({"Timestamp": timestamp, "Impressions": len(lastfollower+uniquef)}, ignore_index=True)
         
     return impressions
+
+def preprocess_data(iloc, tweets, follower, output_file):
+    user = tweets.iloc[iloc]
+    follower.set_axis(["User", "Username", "Displayname", "IrId"], axis=1, inplace=True)
+    retweets = ivermectin.loc[ivermectin["IrId"] == user["Id"]]
+
+    impressions = preprocess(user, retweets, follower)
+    impressions.to_csv(output_file)

@@ -1,6 +1,6 @@
 import preprocessor
 import os
-from initialize import ivermectin, themiostweets, themiosfollower
+from initialize_preprocess import ivermectin, themiostweets, themiosfollower
 
 themios = themiostweets.iloc[0]
 themiosfollower.set_axis(["User", "Username", "Displayname", "IrId"], axis=1, inplace=True)

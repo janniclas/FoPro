@@ -1,0 +1,5 @@
+# Post Reach Analysis
+In order to answer the question *To what extent do echo chamber effects prevent debunking posts from reaching the users that are spreading false information?*, we have to find out whether debunking posts reach the audience of posts containing false information. For this, we first calculate the set of users that were reached by each post with the union of every interacting user’s followers. After that we calculate a matrix containing all set intersections between two different posts, indicating the users that have seen both posts. By dividing the size of these intersections by the size of the respective final audience of each post, we can calculate the percentage of the audience of each post that has also seen any other post. This data gives us insights into whether the debunking posts were seen by the false information audience.
+## How To
+Run the script with `python postreach_py.py path/to/the/data`. Make sure to name the files correctly.
+E.g. `80293090-themios-debunking-unique.csv`. If you want to analyse different datasets you need to change this in the code.

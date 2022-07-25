@@ -11,9 +11,10 @@ import pandas as pd
 import re 
 import numpy as np
 from varname import nameof
+import sys
 
-
-os.chdir("Path/To/Your/Data") # directory with queried follower - files
+data_directory = sys.argv[1]
+os.chdir(data_directory) # directory with queried follower - files
 
 #######################################################################################################
 

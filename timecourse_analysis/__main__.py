@@ -12,9 +12,9 @@ def preprocess():
     preprocessor.preprocess_data(0, themiostweets, themiosfollower, os.path.join("impressions", "themios_impressions.csv"))
 
 def statistics(): 
-    import diffusion 
-    import interactions 
-    import spreadingrate 
+    from diffusion import all_diffusions 
+    from interactions import all_interactions 
+    from spreadingrate import all_spreading_rates 
     all_diffusions()
     all_interactions()
     all_spreading_rates()

@@ -1,0 +1,5 @@
+Rscript -e 'install.packages("dplyr", repos="https://cloud.r-project.org")'
+Rscript -e 'install.packages("tidyverse", repos="https://cloud.r-project.org")'
+Rscript -e 'install.packages("ggplot2", repos="https://cloud.r-project.org")'
+Rscript -e 'install.packages("ggbeeswarm", repos="https://cloud.r-project.org")'
+Rscript -e 'install.packages("coin", repos="https://cloud.r-project.org")'

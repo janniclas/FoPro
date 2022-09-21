@@ -10,7 +10,7 @@ import {
 import { queryFollower } from "./query";
 import { removeDuplicateRows } from "./remove";
 import { calculateStatistics, saveUniqueFollower } from "./statistic";
-import { verifyFollower } from "./verify";
+import { getFollowerCount, verifyFollower } from "./verify";
 
 const main = async () => {
   const { bearerToken, filePath, mode } = readConfig();
@@ -34,6 +34,9 @@ const main = async () => {
       console.log("Running in verify mode");
       verifyFollower(outputPath, noDuplicates.length, bearerToken);
       break;
+    case "follower-count": 
+        getFollowerCount(noDuplicates, outputPath, bearerToken);
+        break;
     case "statistic":
       calculateStatistics(filePath).then((statistic) =>
         saveUniqueFollower(filePath, statistic)

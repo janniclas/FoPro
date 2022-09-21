@@ -3,6 +3,27 @@ import * as csv from "fast-csv";
 import Client from "twitter-api-sdk";
 
 import { getExpectedFollowerCount } from "./twitterQuery";
+import path = require("path");
+import { CsvFile } from "./fileWriter";
+
+export const getFollowerCount = async (followers: string[], outputPath: string, bearerToken: string) => {
+  const client = new Client(bearerToken);
+  const p = path.parse(outputPath);
+  const noDuplicatesPath = p.dir + "/" + p.name + "-noduplicates.csv";
+  const csvFile = new CsvFile({
+    path: noDuplicatesPath,
+    headers: ["id", "count"],
+  });
+  csvFile.create([]);
+  let sum = 0;
+  for (const follower of followers) {
+     const followerCount = await getExpectedFollowerCount(client, follower);
+     sum += followerCount ?? 0;
+      const nextRow: string[] = [follower + ", " +followerCount!];
+      csvFile.append([nextRow]);
+  }
+  csvFile.append([["Sum, " + sum]]);
+}
 
 export const verifyFollower = async (
   filePath: string,

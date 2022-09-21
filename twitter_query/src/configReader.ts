@@ -5,11 +5,13 @@ import path = require("node:path");
 export const readConfig = () => {
   const bearerToken = process.env.BEARER_TOKEN;
   const customArgs = process.argv.slice(2);
-  const pathString = customArgs[1];
   const mode = customArgs[0];
 
-  if (bearerToken && pathString && mode) {
-    return { bearerToken: bearerToken, filePath: pathString, mode: mode };
+  const pathStrings = customArgs.slice(1);
+
+
+  if (bearerToken && pathStrings && mode) {
+    return { bearerToken: bearerToken, filePaths: pathStrings, mode: mode };
   } else {
     throw Error("Not all input params were provided correctly.");
   }

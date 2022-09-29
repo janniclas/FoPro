@@ -20,8 +20,8 @@ export const readConfig = () => {
 export const getPaths = (filePath: string, originalAuthorId: string) => {
   const p = path.parse(filePath);
   return {
-    outputPath: p.dir + "/" + originalAuthorId + ".csv",
-    logPath: p.dir + "/" + originalAuthorId + ".log",
+    outputPath: p.dir + "/" + originalAuthorId + p.name + ".csv",
+    logPath: p.dir + "/" + originalAuthorId + p.name + ".log",
   };
 };
 
